@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Удаление упражнений</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            background-color: #c0c0c0;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            width: 600px;
+        }
+
+        .exercise-list {
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        .exercise-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .exercise-item button {
+            padding: 5px 10px;
+            background-color: #696969;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .exercise-item button:hover {
+            background-color: #808080;
+        }
+
+        .back-button {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .back-button button {
+            padding: 10px 20px;
+            background-color: #696969;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .back-button button:hover {
+            background-color: #808080;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Список упражнений</h2>
+        <div class="exercise-list">
+			<!-- ??? 1) EXERCISE VARIABLES; 2) DYNAMIC EXERCISE DISPLAY; ??? -->
+			{% block content %}
+				{% for exercise in exercises %}
+					<div class="exercise-item">
+						<span>{{ exercise.name }}</span> <!-- mb more param ??? -->
+						<button onclick="removeExercise(this)">Удалить</button> <<!-- params to real removing ???-->
+					</div>
+				{% endfor %}
+			{% endblock content %}
+            <!-- Добавьте дополнительные упражнения здесь -->
+        </div>
+        <div class="back-button">
+            <button onclick="goBack()">Вернуться назад</button>
+        </div>
+    </div>
+
+    <script>
+        function removeExercise(button) {
+            button.parentNode.remove();
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</body>
+</html>
