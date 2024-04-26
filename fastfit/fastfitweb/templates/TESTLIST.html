@@ -31,12 +31,17 @@
         }
 
         .exercise-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-            border-bottom: 1px solid #ccc;
+        margin-bottom: 10px; /* добавляет пространство между каждым элементом */
+        padding: 10px; /* добавляет внутренний отступ вокруг каждого элемента */
+        border: 1px solid #ccc; /* добавляет рамку вокруг каждого элемента */
+        border-radius: 5px; /* делает края элемента слегка закругленными */
+    }
+
+        .exercise-item span {
+            display: block; /* делает каждый элемент span блочным, чтобы они располагались вертикально */
+            margin-bottom: 15px; /* добавляет пространство между каждым элементом span */
         }
+
 
         .exercise-item button {
             padding: 5px 10px;
@@ -77,17 +82,15 @@
         <h2>Список упражнений</h2>
         <div class="exercise-list">
 			<!-- ??? 1) EXERCISE VARIABLES; 2) DYNAMIC EXERCISE DISPLAY; ??? -->
-            {% block content %}
-                {% for exercise in Exercises %}
-                    <div class="exercise-item">
-                        <span>{{ exercise.exercise_name }}</span>
-                        <a href="/workout/remove/{{ exercise.id }}" onclick="removeExercise(this); /workout/remove/{{ exercise.id };">
-                            <button>Удалить</button>
-                        </a>
-                    </div>
-                {% endfor %}
-            {% endblock content %}
-
+			{% block content %}
+				{% for exercise in Exercises %}
+					<div class="exercise-item">
+                        <span>{{ exercise.exercise_name }}</span> <!-- mb more param ??? -->
+						<span>{{ exercise.muscle_group }}</span> <!-- mb more param ??? -->
+						<span>{{ exercise.technique_description }}</span> <!-- mb more param ??? -->
+					</div>
+				{% endfor %}
+			{% endblock content %}
             <!-- Добавьте дополнительные упражнения здесь -->
         </div>
         <div class="back-button">

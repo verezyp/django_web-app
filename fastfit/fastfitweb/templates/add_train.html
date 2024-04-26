@@ -101,7 +101,9 @@
     <div class="container">
         <div class="add-exercise">
             <h2>Добавить упражнение</h2>
-            <form action="/add_exercise" method="post">
+            <form action="" method="post">
+                {% csrf_token %}
+
                 <div class="form-group">
                     <label for="exercise_name">Название:</label>
                     <input type="text" id="exercise_name" name="exercise_name" required>
@@ -122,15 +124,6 @@
                 <button class="back-button" onclick="window.history.back()">Вернуться назад</button>
             </div>
         </div>
-        <div class="exercise-list">
-		<!-- ??? 1) EXERCISE VARIABLES; 2) DYNAMIC EXERCISE DISPLAY; ??? -->
-            <h2>Список упражнений</h2>
-			{% block content %}
-				{% for exercise in exercises %}
-					<div class="exercise-item">{{ exercise.name }}</div> <!-- mb more param ??? -->
-				{% endfor %}
-			{% endblock content %}
-        </div>
-    </div>
+
 </body>
 </html>

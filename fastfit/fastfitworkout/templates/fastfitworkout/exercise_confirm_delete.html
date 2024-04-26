@@ -1,0 +1,15 @@
+{%extends 'delete.html' %}
+
+{%block content%}
+<div class="center">
+	<form method="post" class="card">
+		{% csrf_token %}
+		<h2>Delete Task</h2>
+		<p>Are you sure that you want to delete it?</p>
+		<p class="back-button">
+			<input type="submit" class="btn btn-primary" value="Delete">
+		</p>
+	</form>
+</div>
+
+{%endblock content%}
