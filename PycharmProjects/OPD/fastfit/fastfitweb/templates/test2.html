@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Авторизация и регистрация</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #c0c0c0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+    
+
+            .form-container form {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .form-container input[type="text"],
+            .form-container input[type="password"],
+            .form-container input[type="submit"] {
+                margin-bottom: 10px;
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                font-size: 16px;
+            }
+
+            .form-container button {
+                margin-bottom: 10px;
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                font-size: 16px;
+                background-color: #696969;
+                color: #fff;
+                cursor: pointer;
+            }
+
+            .form-container button:hover {
+                background-color: #808080;
+            }
+
+        .switch-form {
+            text-align: center;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <button onclick="location.href='users/login'">Авторизация</button>
+    </div>
+
+    <div class="form-container" id="registration">
+        <button onclick="location.href='users/register'">Регистрация</button>
+    </div>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<html>
+    <h1>Members DataBase</h1>
+    {% for item in all %}
+    <p>{{  item.email  }}</p>
+    {% endfor %}
+</html>
+
+{% endblock %}
