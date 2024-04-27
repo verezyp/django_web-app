@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Удаление упражнений</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            background-color: #c0c0c0;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            width: 600px;
+        }
+
+        .exercise-list {
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        .exercise-item {
+        margin-bottom: 10px; /* добавляет пространство между каждым элементом */
+        padding: 10px; /* добавляет внутренний отступ вокруг каждого элемента */
+        border: 1px solid #ccc; /* добавляет рамку вокруг каждого элемента */
+        border-radius: 5px; /* делает края элемента слегка закругленными */
+    }
+
+        .exercise-item span {
+            display: block; /* делает каждый элемент span блочным, чтобы они располагались вертикально */
+            margin-bottom: 15px; /* добавляет пространство между каждым элементом span */
+        }
+
+
+        .exercise-item button {
+            padding: 5px 10px;
+            background-color: #696969;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .exercise-item button:hover {
+            background-color: #808080;
+        }
+
+        .back-button {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .back-button button {
+            padding: 10px 20px;
+            background-color: #696969;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .back-button button:hover {
+            background-color: #808080;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+    <h2>Список тренировок</h2>
+    <div class="exercise-list">
+        {% block content %}
+        {% for train in Trainings %}
+        <span>Название: {{ train.name }}</span>
+            {% for exercise in Exercises %}
+                <div class="exercise-item">
+                    <span><strong>{{ exercise.exercise_name }}</strong></span>
+                    <span>Группа мышц: {{ exercise.muscle_group }}</span>
+                    <span>Техника выполнения упражнения: {{ exercise.technique_description }}</span>
+                </div>
+            {% endfor %}
+        {% endblock content %}
+    </div>
+    <div class="back-button">
+        <button onclick="goBack()">Вернуться назад</button>
+    </div>
+</div>
+    <script>
+        function removeExercise(button) {
+            button.parentNode.remove();
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Создание тренировки</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #c0c0c0;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+            .form-group label {
+                display: block;
+                margin-bottom: 5px;
+                font-weight: bold;
+            }
+
+            .form-group input[type="text"],
+            .form-group input[type="number"] {
+                width: calc(50% - 5px);
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                font-size: 16px;
+            }
+
+            .form-group input[type="submit"],
+            .form-group button {
+                width: calc(50% - 5px);
+                padding: 10px 20px;
+                background-color: #696969;
+                color: #fff;
+                border: none;
+                border-radius: 4px;
+                font-size: 14px;
+                cursor: pointer;
+            }
+
+                .form-group input[type="submit"]:hover,
+                .form-group button:hover {
+                    background-color: #808080;
+                }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Создание тренировки</h2>
+        <form action="" method="post">
+            {% csrf_token %}
+            {% if Training %}
+                {{ Training.name }}
+            {% endif %}
+            <input type="hidden" id="training" name="training" value="{{ Training.id }}">
+            <div class="form-group">
+                <label for="exercise">Выберите упражнение:</label>
+                <select id="exercise" name="exercise">
+                    {% for exercise in Exercises %}
+                            <option value="{{ exercise.id }}">{{ exercise.exercise_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="sets">Количество подходов:</label>
+                <input type="number" id="sets" name="sets" min="1" required>
+            </div>
+            <div class="form-group">
+                <label for="repetitions">Количество повторений:</label>
+                <input type="number" id="repetitions" name="repetitions" min="1" required>
+            </div>
+            <div class="form-group">
+                <label for="weight">Вес (кг):</label>
+                <input type="number" id="weight" name="weight" min="0" step="0.5">
+            </div>
+            <div class="form-group">
+                <label for="time">Время выполнения:</label>
+                <input type="text" id="time" name="time">
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Добавить упражнение">
+                <button type="button" onclick="window.location.href='{% url 'fastfitweb:main' %}'">Вернуться назад</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

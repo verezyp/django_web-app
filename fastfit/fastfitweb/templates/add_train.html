@@ -103,7 +103,6 @@
             <h2>Добавить упражнение</h2>
             <form action="" method="post">
                 {% csrf_token %}
-
                 <div class="form-group">
                     <label for="exercise_name">Название:</label>
                     <input type="text" id="exercise_name" name="exercise_name" required>
@@ -121,7 +120,7 @@
                 </div>
             </form>
             <div class="form-group">
-                <button class="back-button" onclick="window.history.back()">Вернуться назад</button>
+                <button class="back-button" onclick="window.location.href='{% url 'fastfitweb:main' %}'">Вернуться назад</button>
             </div>
         </div>
 
