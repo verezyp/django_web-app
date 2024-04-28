@@ -6,6 +6,7 @@ class Exercise(models.Model):
     muscle_group = models.CharField(max_length=64)
     technique_description = models.CharField(max_length=512)
 
+    uid = models.PositiveIntegerField(default=1)
     def __str__(self):
         return self.exercise_name
 
@@ -25,6 +26,8 @@ class ExerciseInTraining(models.Model):
     sets = models.PositiveIntegerField()
     repetitions = models.PositiveIntegerField()
     weight = models.FloatField()
+
+    uid = models.PositiveIntegerField(default=1)
 
     def __str__(self):
         return

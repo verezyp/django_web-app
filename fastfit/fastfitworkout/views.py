@@ -21,20 +21,33 @@ def exerc_manage(request):
     return render(request, 'edit_train.html', {})
 
 
-class AddExercise(LoginRequiredMixin, FormView): # mb CreateView --> get_absolute_url() --> models.Exercise
+class AddExercise(LoginRequiredMixin, FormView):
     form_class = AddExerForm
     template_name = 'add_train.html'
     success_url = 'exercise_management'
 
-    def form_valid(self, form):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['uid'] = 505 #self.request.user.id
+        return context
+
+    def form_valid(self, form, **kwargs):
+        form.instance.uid = self.request.user.id
         form.save()
         return super().form_valid(form)
+    def form_invalid(self, form):
+        print("Form is invalid. Form data:")
+        for field in form.fields:
+            print(f"{field}: {form.cleaned_data.get(field)}")
+        return super().form_invalid(form)
 
 
 class ViewListExercises(LoginRequiredMixin, ListView):
     model = Exercise
     template_name = 'TESTLIST.html'
     context_object_name = 'Exercises'
+    def get_queryset(self):
+        return Exercise.objects.filter(uid=self.request.user.id)
 
 
 class DeletePreview(ViewListExercises): template_name = 'delete.html'
@@ -56,6 +69,7 @@ class TestTrain(LoginRequiredMixin, FormView):
     success_url = 'exercise_management'
 
     def form_valid(self, form):
+        # exercise.uid = current.user.id
         form.save()
         return super().form_valid(form)
 
@@ -67,7 +81,13 @@ class EnterNameTraining(LoginRequiredMixin, CreateView):
 
     def get_success_url(self): # for dynamic db reloading of obj
         last_training_pk = Training.objects.order_by('pk').last().pk
+        # training.uid = current.user.id
         return f'add_exr_to_train/{last_training_pk}/' # reverse_lazy ?
+
+
+
+#!!! add param 'user'/'user_id' to exerc db, exerc-training db --> show user's exercises and training (shows all rn)
+
 
 
 class AddExerToTrain(LoginRequiredMixin, FormView):
@@ -78,11 +98,10 @@ class AddExerToTrain(LoginRequiredMixin, FormView):
     def get_success_url(self):
         return self.request.get_full_path()
 
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['Exercises'] = Exercise.objects.all()
-        context['Training'] = Training.objects.get(pk=self.kwargs['pk'])
+        context['Exercises'] = Exercise.objects.all() # uid = current.user.id
+        context['Training'] = Training.objects.get(pk=self.kwargs['pk']) # if traning.uid = current.user.id
         return context
 
     def form_valid(self, form):

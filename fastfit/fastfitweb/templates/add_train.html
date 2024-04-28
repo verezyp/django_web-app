@@ -103,6 +103,7 @@
             <h2>Добавить упражнение</h2>
             <form action="" method="post">
                 {% csrf_token %}
+                <input type="hidden" name="uid" value="{{ uid }}">
                 <div class="form-group">
                     <label for="exercise_name">Название:</label>
                     <input type="text" id="exercise_name" name="exercise_name" required>
