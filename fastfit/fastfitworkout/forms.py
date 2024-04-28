@@ -11,8 +11,8 @@ class AddExerForm(forms.ModelForm):
 #    uid = forms.IntegerField(required=False)
     class Meta:
         model = Exercise
-        fields = '__all__'
-        #fields = ['exercise_name', 'muscle_group','technique_description']
+        #fields = '__all__'
+        fields = ['exercise_name', 'muscle_group','technique_description']
     #    labels = {'exercise_name': 'Название', 'muscle_group': 'Группа мышц', 'technique_description': 'Описание'}
     # VALIDATION ?
 

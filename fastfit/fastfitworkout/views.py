@@ -26,26 +26,17 @@ class AddExercise(LoginRequiredMixin, FormView):
     template_name = 'add_train.html'
     success_url = 'exercise_management'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['uid'] = 505 #self.request.user.id
-        return context
-
     def form_valid(self, form, **kwargs):
         form.instance.uid = self.request.user.id
         form.save()
         return super().form_valid(form)
-    def form_invalid(self, form):
-        print("Form is invalid. Form data:")
-        for field in form.fields:
-            print(f"{field}: {form.cleaned_data.get(field)}")
-        return super().form_invalid(form)
 
 
 class ViewListExercises(LoginRequiredMixin, ListView):
     model = Exercise
     template_name = 'TESTLIST.html'
     context_object_name = 'Exercises'
+
     def get_queryset(self):
         return Exercise.objects.filter(uid=self.request.user.id)
 
@@ -55,7 +46,7 @@ class DeletePreview(ViewListExercises): template_name = 'delete.html'
 
 class RemoveExercise(LoginRequiredMixin, DeleteView):
     model = Exercise
-    success_url = '/workout/delete.html' # mb to list
+    success_url = '/workout/delete.html'  # mb to list
     context_object_name = 'exercise'
     template_name = 'fastfitworkout/exercise_confirm_delete.html'
 
@@ -79,18 +70,22 @@ class EnterNameTraining(LoginRequiredMixin, CreateView):
     fields = ['name']
     template_name = 'name.html'
 
-    def get_success_url(self): # for dynamic db reloading of obj
+    def form_valid(self, form):
+        form.instance.uid = self.request.user.id
+        return super().form_valid(form)
+
+    def get_success_url(self):  # for dynamic db reloading of obj
         last_training_pk = Training.objects.order_by('pk').last().pk
         # training.uid = current.user.id
-        return f'add_exr_to_train/{last_training_pk}/' # reverse_lazy ?
+        return f'add_exr_to_train/{last_training_pk}/'  # reverse_lazy ?
 
 
+# !!! add param 'user'/'user_id' to exerc db, exerc-training db --> show user's exercises and training (shows all rn)
 
-#!!! add param 'user'/'user_id' to exerc db, exerc-training db --> show user's exercises and training (shows all rn)
+from django.shortcuts import get_object_or_404
 
 
-
-class AddExerToTrain(LoginRequiredMixin, FormView):
+class AddExerToTrain(LoginRequiredMixin, FormView):  # mb remove uid from form ---> form_valid: uid = ...
 
     template_name = 'testtrain (2).html'
     form_class = AddExerToTrainForm
@@ -98,15 +93,19 @@ class AddExerToTrain(LoginRequiredMixin, FormView):
     def get_success_url(self):
         return self.request.get_full_path()
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, **kwargs):  # VALIDATION train.pk belong uid
         context = super().get_context_data(**kwargs)
-        context['Exercises'] = Exercise.objects.all() # uid = current.user.id
-        context['Training'] = Training.objects.get(pk=self.kwargs['pk']) # if traning.uid = current.user.id
+        context['Exercises'] = Exercise.objects.filter(uid=self.request.user.id)  # uid = current.user.id
+        # context['Training'] = Training.objects.get(pk=self.kwargs['pk']) # if traning.uid = current.user.id
+        context['Training'] = get_object_or_404(Training, pk=self.kwargs['pk'], uid=self.request.user.id)  # not sure;
+        context['uid'] = 505  # self.request.user.id
         return context
 
     def form_valid(self, form):
-         form.save()
-         return super().form_valid(form)
+        form.instance.uid = self.request.user.id
+        form.save()  #
+
+        return super().form_valid(form)
 
     def form_invalid(self, form):
         print("Form is invalid. Form data:")
