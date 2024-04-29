@@ -1,7 +1,7 @@
 from .models import Exercise, Training, ExerciseInTraining
 
 
-def get_spec_set(cur_uid:int):
+def get_spec_set_exrc(cur_uid:int):
     TRAINS = {}
     TrueSetTraining_Exercise = Training.objects.filter(uid=cur_uid).order_by('-id')
     for train_obj in TrueSetTraining_Exercise:

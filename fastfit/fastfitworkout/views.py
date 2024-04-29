@@ -115,12 +115,11 @@ class TrainListView(LoginRequiredMixin, TemplateView):
     template_name = 'TRAINLISTTEST.html'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['TRAINS']= utilscustom.get_spec_set(self.request.user.id)
+        context['TRAINS']= utilscustom.get_spec_set_exrc(self.request.user.id)
         return context
 
 
-class ClearTrainListView(TrainListView):
-    template_name = 'CLEARLISTTRAIN.html'
+class ClearTrainListView(TrainListView): template_name = 'CLEARLISTTRAIN.html'
 
 
 class RemoveTrain(LoginRequiredMixin, DeleteView):
@@ -136,6 +135,7 @@ class RemoveExerciseFromTrain(LoginRequiredMixin, DeleteView):
     model = ExerciseInTraining
     success_url = '/workout/TRAINLISTTEST.html'
     template_name = 'fastfitworkout/exercise_confirm_delete.html'
+
     def get_object(self, **kwargs):
         return get_object_or_404(ExerciseInTraining, uid=self.request.user.id, id=self.kwargs['exrc_id'])
 
@@ -148,4 +148,4 @@ class UpdateExerciseInTraining(LoginRequiredMixin, UpdateView):
 
     def get_object(self, **kwargs):
         return get_object_or_404(ExerciseInTraining, uid=self.request.user.id,
-                                 exercise_id=self.kwargs['exrc_id'], training_id=self.kwargs['train_id'])
+                                 id=self.kwargs['exrc_id'], training_id=self.kwargs['train_id'])
