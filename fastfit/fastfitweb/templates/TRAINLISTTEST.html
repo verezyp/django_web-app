@@ -80,19 +80,33 @@
 <body>
     <div class="container">
     <h2>Список тренировок</h2>
-    <div class="exercise-list">
-        {% block content %}
-        {% for train in Trainings %}
-        <span>Название: {{ train.name }}</span>
-            {% for exercise in Exercises %}
-                <div class="exercise-item">
-                    <span><strong>{{ exercise.exercise_name }}</strong></span>
-                    <span>Группа мышц: {{ exercise.muscle_group }}</span>
-                    <span>Техника выполнения упражнения: {{ exercise.technique_description }}</span>
-                </div>
-            {% endfor %}
-        {% endblock content %}
-    </div>
+ <div class="exercise-list">
+    {% for train_name, train_data in TRAINS.items %}
+        <h2>Название тренировки: {{ train_data.name }}</h2>
+     <a href=" /someremoveaddr/{{ training.id }}" onclick="removeExercise(this); /someremoveaddr/{{ training.id };">
+                            <button>Удалить тренировку</button>
+                        </a>
+     <a href=" /someeditaddr/{{ exercise.id }}" onclick="removeExercise(this); /someeditaddr/{{ exercise.id };">
+                            <button>Редактировать тренировку</button>
+                        </a>
+        {% for exercise_name, exercise_data in train_data.exercises.items %}
+
+        <p>Название упражнения: {{ exercise_data.name }}</p>
+     <a href=" /someremoveaddr/{{ exercise.id }}" onclick="removeExercise(this); /someremoveaddr/{{ exercise.id };">
+                            <button>Убрать</button>
+                        </a>
+     <a href=" /someeditaddr/{{ exercise.id }}" onclick="removeExercise(this); /someeditaddr/{{ exercise.id };">
+                            <button>Изменить упражнение</button>
+                        </a>
+            <ul>
+                <li>Подходы: {{ exercise_data.params.sets }}</li>
+                <li>Повторения: {{ exercise_data.params.repetitions }}</li>
+                <li>Вес: {{ exercise_data.params.weight }}</li>
+                <li>Время: {{ exercise_data.params.time }}</li>
+            </ul>
+        {% endfor %}
+    {% endfor %}
+</div>
     <div class="back-button">
         <button onclick="goBack()">Вернуться назад</button>
     </div>

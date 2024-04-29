@@ -9,5 +9,6 @@ urlpatterns = [
     path('remove/<int:pk>/', views.RemoveExercise.as_view(), name="remove"),
     path('name', views.EnterNameTraining.as_view(), name="name"),
     path('add_exr_to_train/<int:pk>/', views.AddExerToTrain.as_view(), name="add_exr"),
+    path('TRAINLISTTEST.html', views.TrainListView.as_view(), name="TRAINLISTTEST"),
 
 ]
