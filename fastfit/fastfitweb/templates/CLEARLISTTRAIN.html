@@ -80,24 +80,14 @@
 <body>
     <div class="container">
     <h2>Список тренировок</h2>
+         <div class="back-button">
+         <button type="button" onclick="window.location.href='{% url 'fastfitworkout:TRAINLISTTEST' %}'">Редактировать</button>
+        </div>
  <div class="exercise-list">
     {% for train_id, train_data in TRAINS.items %}
         <h2>Название тренировки: {{ train_data.name }}</h2>
-     <a href="/workout/removetrain/{{train_id}}" onclick="removeExercise(this); /workout/removetrain/{{train_id}};">
-                            <button>Удалить тренировку</button>
-                        </a>
-     <a href="add_exr_to_train/{{ train_id }}" onclick="removeExercise(this); workout/add_exr_to_train/{{ train_id }};">
-                            <button>Дополнить тренировку</button>
-                        </a>
         {% for exercise_name, exercise_data in train_data.exercises.items %}
-
         <p>Название упражнения: {{ exercise_data.name }}</p>
-     <a href="/workout/removeexercisetrain/{{ exercise_data.id }}" onclick="removeExercise(this); /workout/removeexercisetrain/{{ exercise_data.id }};">
-                            <button>Убрать</button>
-                        </a>
-     <a href=" /workout/updateexercise/{{ train_id }}/{{ exercise_data.id }}" onclick="removeExercise(this); /workout/updateexercise/{{ exercise_data.id };">
-                            <button>Изменить упражнение</button>
-                        </a>
             <ul>
                 <li>Подходы: {{ exercise_data.params.sets }}</li>
                 <li>Повторения: {{ exercise_data.params.repetitions }}</li>
@@ -110,6 +100,7 @@
     <div class="back-button">
          <button type="button" onclick="window.location.href='{% url 'fastfitweb:main' %}'">Вернуться назад</button>
     </div>
+
 </div>
     <script>
         function removeExercise(button) {

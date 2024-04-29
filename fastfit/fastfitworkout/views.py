@@ -2,10 +2,8 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import TemplateView, ListView, DetailView, FormView, CreateView, DeleteView
+from django.views.generic import TemplateView, ListView, DetailView, FormView, CreateView, DeleteView, UpdateView
 from django.views.generic.edit import FormMixin
-
-from . import utilscustom
 from .forms import AddExerForm, AddExerToTrainForm
 from .forms import EnterNameForm
 from .forms import AddExerToTrainForm, AE_Test_Form
@@ -13,7 +11,7 @@ from django.urls import reverse_lazy
 from .models import Exercise, Training
 from .models import ExerciseInTraining
 from django.shortcuts import get_object_or_404
-
+from . import utilscustom
 
 
 @login_required
@@ -50,6 +48,9 @@ class RemoveExercise(LoginRequiredMixin, DeleteView):
     context_object_name = 'exercise'
     template_name = 'fastfitworkout/exercise_confirm_delete.html'
 
+    def get_object(self, **kwargs):
+        return get_object_or_404(Exercise, uid=self.request.user.id, id=self.kwargs['pk'])
+
     def form_valid(self, form):
         return super(RemoveExercise, self).form_valid(form)
 
@@ -78,10 +79,6 @@ class EnterNameTraining(LoginRequiredMixin, CreateView):
         last_training_pk = Training.objects.order_by('pk').last().pk
         # training.uid = current.user.id
         return f'add_exr_to_train/{last_training_pk}/'  # reverse_lazy ?
-
-
-# !!! add param 'user'/'user_id' to exerc db, exerc-training db --> show user's exercises and training (shows all rn)
-# dict({'trainings' : {{'nametrain' : '*name*', 'exercises' : {{'nameexrc' : '*name*', 'sets' : '*sets*', 'reps' : trps ...}}}}})
 
 
 class AddExerToTrain(LoginRequiredMixin, FormView):  # mb remove uid from form ---> form_valid: uid = ...
@@ -113,28 +110,42 @@ class AddExerToTrain(LoginRequiredMixin, FormView):  # mb remove uid from form -
             print(f"{field}: {form.cleaned_data.get(field)}")
         return super().form_invalid(form)
 
-# to do
-'''
 
-mb make a set() -> {Train1 : {exrc1 , exrc2, ..}, Train2 : {...} ...} # any train.uid == cur.uid and 
-
-Training name 1 : {}
-    exrc 1.1 name sets reps weight time
-    exrc 1.2 name sets reps weight time
-    ...
-    
-Training name 2 :
-    exrc 2.1 name sets reps weight time
-    exrc 2.2 name sets reps weight time
-    ...
-...
-
-'''
-
-# to remove train --> add train.id in train params in dict
 class TrainListView(LoginRequiredMixin, TemplateView):
     template_name = 'TRAINLISTTEST.html'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['TRAINS']= utilscustom.get_spec_set(self.request.user.id)
         return context
+
+
+class ClearTrainListView(TrainListView):
+    template_name = 'CLEARLISTTRAIN.html'
+
+
+class RemoveTrain(LoginRequiredMixin, DeleteView):
+    model = Training
+    success_url = '/workout/TRAINLISTTEST.html'
+    template_name = 'fastfitworkout/exercise_confirm_delete.html'
+
+    def get_object(self, **kwargs):
+        return get_object_or_404(Training, uid=self.request.user.id, id=self.kwargs['pk'])
+
+
+class RemoveExerciseFromTrain(LoginRequiredMixin, DeleteView):
+    model = ExerciseInTraining
+    success_url = '/workout/TRAINLISTTEST.html'
+    template_name = 'fastfitworkout/exercise_confirm_delete.html'
+    def get_object(self, **kwargs):
+        return get_object_or_404(ExerciseInTraining, uid=self.request.user.id, id=self.kwargs['exrc_id'])
+
+
+class UpdateExerciseInTraining(LoginRequiredMixin, UpdateView):
+    model = ExerciseInTraining
+    fields = ['sets', 'repetitions', 'weight', 'time']
+    template_name = 'UPDATETEST.html'
+    success_url = '/workout/TRAINLISTTEST.html'
+
+    def get_object(self, **kwargs):
+        return get_object_or_404(ExerciseInTraining, uid=self.request.user.id,
+                                 exercise_id=self.kwargs['exrc_id'], training_id=self.kwargs['train_id'])
