@@ -5,9 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, ListView, DetailView, FormView, CreateView, DeleteView, UpdateView
 from django.views.generic.edit import FormMixin
 from .forms import AddExerForm, AddExerToTrainForm
-from .forms import EnterNameForm
-from .forms import AddExerToTrainForm, AE_Test_Form
-from django.urls import reverse_lazy
+from .forms import AddExerToTrainForm
 from .models import Exercise, Training
 from .models import ExerciseInTraining
 from django.shortcuts import get_object_or_404
@@ -29,6 +27,8 @@ class AddExercise(LoginRequiredMixin, FormView):
         form.save()
         return super().form_valid(form)
 
+
+from django.db.models import Q
 
 class ViewListExercises(LoginRequiredMixin, ListView):
     model = Exercise
@@ -82,7 +82,6 @@ class EnterNameTraining(LoginRequiredMixin, CreateView):
 
 
 class AddExerToTrain(LoginRequiredMixin, FormView):  # mb remove uid from form ---> form_valid: uid = ...
-
     template_name = 'testtrain (2).html'
     form_class = AddExerToTrainForm
 
@@ -91,7 +90,6 @@ class AddExerToTrain(LoginRequiredMixin, FormView):  # mb remove uid from form -
 
     def get_context_data(self, **kwargs):  # VALIDATION train.pk belong uid
         context = super().get_context_data(**kwargs)
-
         context['Exercises'] = Exercise.objects.filter(uid=self.request.user.id)  # uid = current.user.id
         # context['Training'] = Training.objects.get(pk=self.kwargs['pk']) # if traning.uid = current.user.id
         context['Training'] = get_object_or_404(Training, pk=self.kwargs['pk'], uid=self.request.user.id)  # not sure;
@@ -101,7 +99,6 @@ class AddExerToTrain(LoginRequiredMixin, FormView):  # mb remove uid from form -
     def form_valid(self, form):
         form.instance.uid = self.request.user.id
         form.save()  #
-
         return super().form_valid(form)
 
     def form_invalid(self, form):
@@ -113,9 +110,10 @@ class AddExerToTrain(LoginRequiredMixin, FormView):  # mb remove uid from form -
 
 class TrainListView(LoginRequiredMixin, TemplateView):
     template_name = 'TRAINLISTTEST.html'
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['TRAINS']= utilscustom.get_spec_set_exrc(self.request.user.id)
+        context['TRAINS'] = utilscustom.get_spec_set_exrc(self.request.user.id)
         return context
 
 
