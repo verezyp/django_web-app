@@ -28,7 +28,7 @@ def default_exercises_uploading(sender, instance, created, **kwargs):
     if created:
         user_id = instance.id
         defaults = []
-        with open('C:\\projectopd\\fastfit\\fastfitworkout\\defaultsetexercises.txt', 'r',
+        with open('fastfitusers\defaultsetexercises.txt', 'r',
                   encoding='utf-8') as default_file:
             content = default_file.read().split(':|')
             while content:
